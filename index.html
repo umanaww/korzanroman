@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзан Роман Сергеевич - Образовательный ресурс</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --apple-bg: #ffffff;
+            --apple-text: #1d1d1f;
+            --apple-blue: #0066cc;
+            --apple-gray: #86868b;
+        }
+
+        body {
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Myriad Set Pro", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .apple-spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+            border-top: 2px solid var(--apple-text);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dropdown-active .dropdown-content {
+            max-height: 1500px;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            color: var(--apple-gray);
+            font-size: 14px;
+        }
+
+        .dropdown-active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .topic-link {
+            display: block;
+            padding: 8px 0;
+            color: var(--apple-gray);
+            font-size: 15px;
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+
+        .topic-link:hover {
+            color: var(--apple-blue);
+        }
+
+        .btn-apple {
+            background: var(--apple-text);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 980px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-apple:hover {
+            opacity: 0.8;
+        }
+
+        /* No borders layout */
+        .subject-column {
+            padding: 0;
+        }
+
+        .grade-item {
+            border: none;
+            background: none;
+        }
+
+        .grade-button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 0;
+            font-size: 19px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .grade-button:hover {
+            color: var(--apple-blue);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="mb-8 opacity-20 text-6xl">📡</div>
+        <div class="apple-spinner mb-8"></div>
+        <h2 class="text-2xl font-semibold tracking-tight mb-2">Загрузка документа...</h2>
+        <p class="text-[var(--apple-gray)] mb-8 text-center max-w-xs">Проверка интернет-соединения не удалась. Пожалуйста, попробуйте позже.</p>
+        <button onclick="closeLoading()" class="btn-apple">Вернуться</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-24 max-w-5xl">
+        
+        <!-- Center Profile Section -->
+        <section class="text-center mb-32">
+            <div class="inline-block mb-10">
+                <img src="/avatar.png" alt="Корзан Роман Сергеевич" class="w-32 h-32 rounded-full object-cover grayscale brightness-105" onerror="this.onerror=null;this.style.display='none';">
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight mb-6">Корзан Роман Сергеевич</h1>
+            <p class="max-w-xl mx-auto text-lg text-[var(--apple-gray)] leading-relaxed font-normal">
+                Преподаватель химии и биологии. Данный ресурс содержит учебные материалы, структурированные в соответствии с актуальной образовательной программой Республики Беларусь.
+            </p>
+        </section>
+
+        <!-- Subjects Grid -->
+        <div class="grid md:grid-cols-2 gap-x-24 gap-y-16">
+            
+            <!-- Chemistry Column -->
+            <div class="subject-column">
+                <h2 class="text-3xl font-bold mb-10 tracking-tight">Химия</h2>
+                
+                <div class="space-y-2">
+                    <!-- Grade 7-11 -->
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            7 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Первоначальные химические понятия</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Кислород</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Водород</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Вода</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            8 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Основные характеристики вещества</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Важнейшие классы неорганических соединений</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Строение атома. Периодический закон и периодическая система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химическая связь</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            9 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Повторение основных вопросов курса химии VIII класса</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Растворы. Теория электролитической диссоциации</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Неметаллы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Металлы</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            10 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Введение в органическую химию</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Углеводороды</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Спирты и фенолы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Альдегиды</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Карбоновые кислоты</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Сложные эфиры. Жиры</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Углеводы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Азотсодержащие органические соединения</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Обобщение и систематизация знаний по органической химии</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            11 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Основные понятия и законы химии</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Строение атома и периодический закон</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химическая связь и строение вещества</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химические реакции</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химия растворов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Неметаллы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Металлы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химические вещества в жизни и деятельности человека</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biology Column -->
+            <div class="subject-column">
+                <h2 class="text-3xl font-bold mb-10 tracking-tight">Биология</h2>
+                
+                <div class="space-y-2">
+                    <!-- Grade 6-11 -->
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            6 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Введение</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Живая природа и методы ее изучения</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Клеточное строение живых организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Многообразие живых организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Размножение организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Виды и сообщества организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Экосистемы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Человек и его роль в природе</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            7 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Введение</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Бактерии</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Протисты</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Грибы. Лишайники</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Общая характеристика растений</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Споровые растения</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Голосеменные растения</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Вегетативные органы покрытосеменных растений</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Цветок. Плод. Семя</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Многообразие покрытосеменных растений</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            8 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Общая характеристика животных</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Стрекающие</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Плоские черви</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Круглые черви</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Кольчатые черви</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Моллюски</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Членистоногие</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Тип Хордовые</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Животный мир и хозяйственная деятельность человека</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            9 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Клетки, ткани, органы и системы органов человека</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Нервная система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Сенсорные системы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Эндокринная система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Опорно-двигательный аппарат</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Внутренняя среда организма</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Сердечно-сосудистая система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Дыхательная система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Пищеварительная система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Мочевая система</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Мужская и женская половые системы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Кожа – покров тела</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Высшая нервная деятельность</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            10 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Введение</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Организм и среда</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Человек в окружающей среде</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Размножение и индивидуальное развитие организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Вид и популяция</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Экосистема – основная единица биосферы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Биосфера – живая оболочка Земли</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Человек и биосфера</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grade-item">
+                        <button onclick="toggleDropdown(this)" class="grade-button">
+                            11 Класс <span class="chevron">↓</span>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="pb-6">
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Введение</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Химические компоненты живых организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Клетка – структурная и функциональная единица</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Обмен веществ и преобразование энергии в организме</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Неклеточные формы жизни – вирусы</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Роль регуляции и иммунной системы в поддержании постоянства</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Наследственность и изменчивость организмов</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Селекция и биотехнология</a>
+                                <a href="#" onclick="showLoading(event)" class="topic-link">Эволюция органического мира</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-24 text-center">
+        <p class="text-sm text-[var(--apple-gray)] tracking-tight">© 2023 Корзан Роман Сергеевич. Материалы для общеобразовательных учреждений РБ.</p>
+    </footer>
+
+    <script>
+        function toggleDropdown(button) {
+            const parent = button.parentElement;
+            
+            // Close other dropdowns in the same column
+            const column = parent.closest('.subject-column');
+            column.querySelectorAll('.grade-item').forEach(item => {
+                if (item !== parent) item.classList.remove('dropdown-active');
+            });
+
+            parent.classList.toggle('dropdown-active');
+        }
+
+        function showLoading(event) {
+            event.preventDefault();
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
+
+
